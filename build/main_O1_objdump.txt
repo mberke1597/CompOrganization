@@ -1,0 +1,134 @@
+
+build/main_O1.elf:     file format elf32-littleriscv
+
+
+Disassembly of section .text:
+
+00010000 <_start>:
+   10000:	80000137          	lui	x2,0x80000
+   10004:	ff010113          	addi	x2,x2,-16 # 7ffffff0 <__global_pointer$+0x7ffee624>
+   10008:	19c000ef          	jal	x1,101a4 <main>
+   1000c:	00a00893          	addi	x17,x0,10
+   10010:	00000073          	ecall
+   10014:	0000006f          	jal	x0,10014 <_start+0x14>
+
+00010018 <lcg_next>:
+   10018:	001967b7          	lui	x15,0x196
+   1001c:	60d78793          	addi	x15,x15,1549 # 19660d <__global_pointer$+0x184c41>
+   10020:	02f50533          	mul	x10,x10,x15
+   10024:	3c6ef7b7          	lui	x15,0x3c6ef
+   10028:	35f78793          	addi	x15,x15,863 # 3c6ef35f <__global_pointer$+0x3c6dd993>
+   1002c:	00f50533          	add	x10,x10,x15
+   10030:	00008067          	jalr	x0,0(x1)
+
+00010034 <out_of_order>:
+   10034:	00061663          	bne	x12,x0,10040 <out_of_order+0xc>
+   10038:	00a5a533          	slt	x10,x11,x10
+   1003c:	00008067          	jalr	x0,0(x1)
+   10040:	00b52533          	slt	x10,x10,x11
+   10044:	00008067          	jalr	x0,0(x1)
+
+00010048 <generate>:
+   10048:	00011637          	lui	x12,0x11
+   1004c:	1e060613          	addi	x12,x12,480 # 111e0 <data>
+   10050:	0b460313          	addi	x6,x12,180
+   10054:	0012c737          	lui	x14,0x12c
+   10058:	4c570713          	addi	x14,x14,1221 # 12c4c5 <__global_pointer$+0x11aaf9>
+   1005c:	00196837          	lui	x16,0x196
+   10060:	60d80813          	addi	x16,x16,1549 # 19660d <__global_pointer$+0x184c41>
+   10064:	3c6ef537          	lui	x10,0x3c6ef
+   10068:	35f50513          	addi	x10,x10,863 # 3c6ef35f <__global_pointer$+0x3c6dd993>
+   1006c:	106255b7          	lui	x11,0x10625
+   10070:	dd358593          	addi	x11,x11,-557 # 10624dd3 <__global_pointer$+0x10613407>
+   10074:	3e800893          	addi	x17,x0,1000
+   10078:	03070733          	mul	x14,x14,x16
+   1007c:	00a70733          	add	x14,x14,x10
+   10080:	01075693          	srli	x13,x14,0x10
+   10084:	02b6b7b3          	mulhu	x15,x13,x11
+   10088:	0067d793          	srli	x15,x15,0x6
+   1008c:	031787b3          	mul	x15,x15,x17
+   10090:	40f686b3          	sub	x13,x13,x15
+   10094:	00d62023          	sw	x13,0(x12)
+   10098:	00460613          	addi	x12,x12,4
+   1009c:	fc661ee3          	bne	x12,x6,10078 <generate+0x30>
+   100a0:	00008067          	jalr	x0,0(x1)
+
+000100a4 <sort>:
+   100a4:	000117b7          	lui	x15,0x11
+   100a8:	1d07a803          	lw	x16,464(x15) # 111d0 <swaps>
+   100ac:	00011e37          	lui	x28,0x11
+   100b0:	1e0e0e13          	addi	x28,x28,480 # 111e0 <data>
+   100b4:	0b0e0593          	addi	x11,x28,176
+   100b8:	00000893          	addi	x17,x0,0
+   100bc:	00100313          	addi	x6,x0,1
+   100c0:	0400006f          	jal	x0,10100 <sort+0x5c>
+   100c4:	02d74063          	blt	x14,x13,100e4 <sort+0x40>
+   100c8:	00478793          	addi	x15,x15,4
+   100cc:	02b78663          	beq	x15,x11,100f8 <sort+0x54>
+   100d0:	00078613          	addi	x12,x15,0
+   100d4:	0007a703          	lw	x14,0(x15)
+   100d8:	0047a683          	lw	x13,4(x15)
+   100dc:	fe0514e3          	bne	x10,x0,100c4 <sort+0x20>
+   100e0:	fee6d4e3          	bge	x13,x14,100c8 <sort+0x24>
+   100e4:	00d62023          	sw	x13,0(x12)
+   100e8:	00e62223          	sw	x14,4(x12)
+   100ec:	00180813          	addi	x16,x16,1
+   100f0:	00030893          	addi	x17,x6,0
+   100f4:	fd5ff06f          	jal	x0,100c8 <sort+0x24>
+   100f8:	ffc58593          	addi	x11,x11,-4
+   100fc:	01c58663          	beq	x11,x28,10108 <sort+0x64>
+   10100:	000e0793          	addi	x15,x28,0
+   10104:	fcdff06f          	jal	x0,100d0 <sort+0x2c>
+   10108:	00088663          	beq	x17,x0,10114 <sort+0x70>
+   1010c:	000117b7          	lui	x15,0x11
+   10110:	1d07a823          	sw	x16,464(x15) # 111d0 <swaps>
+   10114:	00008067          	jalr	x0,0(x1)
+
+00010118 <stats>:
+   10118:	000115b7          	lui	x11,0x11
+   1011c:	1e058593          	addi	x11,x11,480 # 111e0 <data>
+   10120:	0005a683          	lw	x13,0(x11)
+   10124:	000117b7          	lui	x15,0x11
+   10128:	1cd7aa23          	sw	x13,468(x15) # 111d4 <max_v>
+   1012c:	000117b7          	lui	x15,0x11
+   10130:	1cd7ac23          	sw	x13,472(x15) # 111d8 <min_v>
+   10134:	00458793          	addi	x15,x11,4
+   10138:	0b458593          	addi	x11,x11,180
+   1013c:	00068613          	addi	x12,x13,0
+   10140:	00000893          	addi	x17,x0,0
+   10144:	00000813          	addi	x16,x0,0
+   10148:	00100513          	addi	x10,x0,1
+   1014c:	00c0006f          	jal	x0,10158 <stats+0x40>
+   10150:	00478793          	addi	x15,x15,4
+   10154:	02f58263          	beq	x11,x15,10178 <stats+0x60>
+   10158:	0007a703          	lw	x14,0(x15)
+   1015c:	00d75663          	bge	x14,x13,10168 <stats+0x50>
+   10160:	00070693          	addi	x13,x14,0
+   10164:	00050813          	addi	x16,x10,0
+   10168:	fee654e3          	bge	x12,x14,10150 <stats+0x38>
+   1016c:	00070613          	addi	x12,x14,0
+   10170:	00050893          	addi	x17,x10,0
+   10174:	fddff06f          	jal	x0,10150 <stats+0x38>
+   10178:	00088663          	beq	x17,x0,10184 <stats+0x6c>
+   1017c:	000117b7          	lui	x15,0x11
+   10180:	1cc7aa23          	sw	x12,468(x15) # 111d4 <max_v>
+   10184:	00080663          	beq	x16,x0,10190 <stats+0x78>
+   10188:	000117b7          	lui	x15,0x11
+   1018c:	1cd7ac23          	sw	x13,472(x15) # 111d8 <min_v>
+   10190:	000117b7          	lui	x15,0x11
+   10194:	2387a703          	lw	x14,568(x15) # 11238 <data+0x58>
+   10198:	000117b7          	lui	x15,0x11
+   1019c:	1ce7ae23          	sw	x14,476(x15) # 111dc <median>
+   101a0:	00008067          	jalr	x0,0(x1)
+
+000101a4 <main>:
+   101a4:	ff010113          	addi	x2,x2,-16
+   101a8:	00112623          	sw	x1,12(x2)
+   101ac:	e9dff0ef          	jal	x1,10048 <generate>
+   101b0:	00100513          	addi	x10,x0,1
+   101b4:	ef1ff0ef          	jal	x1,100a4 <sort>
+   101b8:	f61ff0ef          	jal	x1,10118 <stats>
+   101bc:	00000513          	addi	x10,x0,0
+   101c0:	00c12083          	lw	x1,12(x2)
+   101c4:	01010113          	addi	x2,x2,16
+   101c8:	00008067          	jalr	x0,0(x1)
