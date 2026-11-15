@@ -1,0 +1,340 @@
+
+build/main_v2_O0.elf:     file format elf32-littleriscv
+
+
+Disassembly of section .text:
+
+00010000 <_start>:
+    .section .text.start
+    .globl _start
+_start:
+    li   sp, 0x7ffffff0
+   10000:	80000137          	lui	sp,0x80000
+   10004:	ff010113          	addi	sp,sp,-16 # 7ffffff0 <__global_pointer$+0x7ffee404>
+    call main
+   10008:	3a0000ef          	jal	103a8 <main>
+    li   a7, 10
+   1000c:	00a00893          	li	a7,10
+    ecall
+   10010:	00000073          	ecall
+1:  j    1b
+   10014:	0000006f          	j	10014 <_start+0x14>
+
+00010018 <lcg_next>:
+
+int data[N];
+int median, min_v, max_v, swaps;
+
+unsigned int lcg_next(unsigned int x)
+{
+   10018:	fe010113          	addi	sp,sp,-32
+   1001c:	00112e23          	sw	ra,28(sp)
+   10020:	00812c23          	sw	s0,24(sp)
+   10024:	02010413          	addi	s0,sp,32
+   10028:	fea42623          	sw	a0,-20(s0)
+    return 1664525u * x + 1013904223u;
+   1002c:	fec42703          	lw	a4,-20(s0)
+   10030:	001967b7          	lui	a5,0x196
+   10034:	60d78793          	addi	a5,a5,1549 # 19660d <__global_pointer$+0x184a21>
+   10038:	02f70733          	mul	a4,a4,a5
+   1003c:	3c6ef7b7          	lui	a5,0x3c6ef
+   10040:	35f78793          	addi	a5,a5,863 # 3c6ef35f <__global_pointer$+0x3c6dd773>
+   10044:	00f707b3          	add	a5,a4,a5
+}
+   10048:	00078513          	mv	a0,a5
+   1004c:	01c12083          	lw	ra,28(sp)
+   10050:	01812403          	lw	s0,24(sp)
+   10054:	02010113          	addi	sp,sp,32
+   10058:	00008067          	ret
+
+0001005c <out_of_order>:
+
+int out_of_order(int a, int b, int desc)
+{
+   1005c:	fe010113          	addi	sp,sp,-32
+   10060:	00112e23          	sw	ra,28(sp)
+   10064:	00812c23          	sw	s0,24(sp)
+   10068:	02010413          	addi	s0,sp,32
+   1006c:	fea42623          	sw	a0,-20(s0)
+   10070:	feb42423          	sw	a1,-24(s0)
+   10074:	fec42223          	sw	a2,-28(s0)
+    if (desc)
+   10078:	fe442783          	lw	a5,-28(s0)
+   1007c:	00078c63          	beqz	a5,10094 <out_of_order+0x38>
+        return a < b;
+   10080:	fec42703          	lw	a4,-20(s0)
+   10084:	fe842783          	lw	a5,-24(s0)
+   10088:	00f727b3          	slt	a5,a4,a5
+   1008c:	0ff7f793          	zext.b	a5,a5
+   10090:	0140006f          	j	100a4 <out_of_order+0x48>
+    return a > b;
+   10094:	fec42703          	lw	a4,-20(s0)
+   10098:	fe842783          	lw	a5,-24(s0)
+   1009c:	00e7a7b3          	slt	a5,a5,a4
+   100a0:	0ff7f793          	zext.b	a5,a5
+}
+   100a4:	00078513          	mv	a0,a5
+   100a8:	01c12083          	lw	ra,28(sp)
+   100ac:	01812403          	lw	s0,24(sp)
+   100b0:	02010113          	addi	sp,sp,32
+   100b4:	00008067          	ret
+
+000100b8 <generate>:
+
+void generate(void)
+{
+   100b8:	fe010113          	addi	sp,sp,-32
+   100bc:	00112e23          	sw	ra,28(sp)
+   100c0:	00812c23          	sw	s0,24(sp)
+   100c4:	02010413          	addi	s0,sp,32
+    unsigned int x = (unsigned int)SID;
+   100c8:	0012c7b7          	lui	a5,0x12c
+   100cc:	4c578793          	addi	a5,a5,1221 # 12c4c5 <__global_pointer$+0x11a8d9>
+   100d0:	fef42623          	sw	a5,-20(s0)
+    for (int i = 0; i < N; i++) {
+   100d4:	fe042423          	sw	zero,-24(s0)
+   100d8:	05c0006f          	j	10134 <generate+0x7c>
+        x = lcg_next(x);
+   100dc:	fec42503          	lw	a0,-20(s0)
+   100e0:	f39ff0ef          	jal	10018 <lcg_next>
+   100e4:	fea42623          	sw	a0,-20(s0)
+        data[i] = (int)((x >> 16) % 1000u);
+   100e8:	fec42783          	lw	a5,-20(s0)
+   100ec:	0107d713          	srli	a4,a5,0x10
+   100f0:	106257b7          	lui	a5,0x10625
+   100f4:	dd378793          	addi	a5,a5,-557 # 10624dd3 <__global_pointer$+0x106131e7>
+   100f8:	02f737b3          	mulhu	a5,a4,a5
+   100fc:	0067d793          	srli	a5,a5,0x6
+   10100:	3e800693          	li	a3,1000
+   10104:	02d787b3          	mul	a5,a5,a3
+   10108:	40f707b3          	sub	a5,a4,a5
+   1010c:	00078693          	mv	a3,a5
+   10110:	000117b7          	lui	a5,0x11
+   10114:	40078713          	addi	a4,a5,1024 # 11400 <data>
+   10118:	fe842783          	lw	a5,-24(s0)
+   1011c:	00279793          	slli	a5,a5,0x2
+   10120:	00f707b3          	add	a5,a4,a5
+   10124:	00d7a023          	sw	a3,0(a5)
+    for (int i = 0; i < N; i++) {
+   10128:	fe842783          	lw	a5,-24(s0)
+   1012c:	00178793          	addi	a5,a5,1
+   10130:	fef42423          	sw	a5,-24(s0)
+   10134:	fe842703          	lw	a4,-24(s0)
+   10138:	02c00793          	li	a5,44
+   1013c:	fae7d0e3          	bge	a5,a4,100dc <generate+0x24>
+    }
+}
+   10140:	00000013          	nop
+   10144:	00000013          	nop
+   10148:	01c12083          	lw	ra,28(sp)
+   1014c:	01812403          	lw	s0,24(sp)
+   10150:	02010113          	addi	sp,sp,32
+   10154:	00008067          	ret
+
+00010158 <sort>:
+
+void sort(int desc)
+{
+   10158:	fd010113          	addi	sp,sp,-48
+   1015c:	02112623          	sw	ra,44(sp)
+   10160:	02812423          	sw	s0,40(sp)
+   10164:	03010413          	addi	s0,sp,48
+   10168:	fca42e23          	sw	a0,-36(s0)
+    int s = 0;
+   1016c:	fe042623          	sw	zero,-20(s0)
+    for (int pass = 0; pass < N - 1; pass++)
+   10170:	fe042423          	sw	zero,-24(s0)
+   10174:	1000006f          	j	10274 <sort+0x11c>
+        for (int j = 0; j < N - 1 - pass; j++)
+   10178:	fe042223          	sw	zero,-28(s0)
+   1017c:	0d80006f          	j	10254 <sort+0xfc>
+            if (out_of_order(data[j], data[j + 1], desc)) {
+   10180:	000117b7          	lui	a5,0x11
+   10184:	40078713          	addi	a4,a5,1024 # 11400 <data>
+   10188:	fe442783          	lw	a5,-28(s0)
+   1018c:	00279793          	slli	a5,a5,0x2
+   10190:	00f707b3          	add	a5,a4,a5
+   10194:	0007a683          	lw	a3,0(a5)
+   10198:	fe442783          	lw	a5,-28(s0)
+   1019c:	00178793          	addi	a5,a5,1
+   101a0:	00011737          	lui	a4,0x11
+   101a4:	40070713          	addi	a4,a4,1024 # 11400 <data>
+   101a8:	00279793          	slli	a5,a5,0x2
+   101ac:	00f707b3          	add	a5,a4,a5
+   101b0:	0007a783          	lw	a5,0(a5)
+   101b4:	fdc42603          	lw	a2,-36(s0)
+   101b8:	00078593          	mv	a1,a5
+   101bc:	00068513          	mv	a0,a3
+   101c0:	e9dff0ef          	jal	1005c <out_of_order>
+   101c4:	00050793          	mv	a5,a0
+   101c8:	08078063          	beqz	a5,10248 <sort+0xf0>
+                int t = data[j];
+   101cc:	000117b7          	lui	a5,0x11
+   101d0:	40078713          	addi	a4,a5,1024 # 11400 <data>
+   101d4:	fe442783          	lw	a5,-28(s0)
+   101d8:	00279793          	slli	a5,a5,0x2
+   101dc:	00f707b3          	add	a5,a4,a5
+   101e0:	0007a783          	lw	a5,0(a5)
+   101e4:	fef42023          	sw	a5,-32(s0)
+                data[j] = data[j + 1];
+   101e8:	fe442783          	lw	a5,-28(s0)
+   101ec:	00178793          	addi	a5,a5,1
+   101f0:	00011737          	lui	a4,0x11
+   101f4:	40070713          	addi	a4,a4,1024 # 11400 <data>
+   101f8:	00279793          	slli	a5,a5,0x2
+   101fc:	00f707b3          	add	a5,a4,a5
+   10200:	0007a703          	lw	a4,0(a5)
+   10204:	000117b7          	lui	a5,0x11
+   10208:	40078693          	addi	a3,a5,1024 # 11400 <data>
+   1020c:	fe442783          	lw	a5,-28(s0)
+   10210:	00279793          	slli	a5,a5,0x2
+   10214:	00f687b3          	add	a5,a3,a5
+   10218:	00e7a023          	sw	a4,0(a5)
+                data[j + 1] = t;
+   1021c:	fe442783          	lw	a5,-28(s0)
+   10220:	00178793          	addi	a5,a5,1
+   10224:	00011737          	lui	a4,0x11
+   10228:	40070713          	addi	a4,a4,1024 # 11400 <data>
+   1022c:	00279793          	slli	a5,a5,0x2
+   10230:	00f707b3          	add	a5,a4,a5
+   10234:	fe042703          	lw	a4,-32(s0)
+   10238:	00e7a023          	sw	a4,0(a5)
+                s++;
+   1023c:	fec42783          	lw	a5,-20(s0)
+   10240:	00178793          	addi	a5,a5,1
+   10244:	fef42623          	sw	a5,-20(s0)
+        for (int j = 0; j < N - 1 - pass; j++)
+   10248:	fe442783          	lw	a5,-28(s0)
+   1024c:	00178793          	addi	a5,a5,1
+   10250:	fef42223          	sw	a5,-28(s0)
+   10254:	02c00713          	li	a4,44
+   10258:	fe842783          	lw	a5,-24(s0)
+   1025c:	40f707b3          	sub	a5,a4,a5
+   10260:	fe442703          	lw	a4,-28(s0)
+   10264:	f0f74ee3          	blt	a4,a5,10180 <sort+0x28>
+    for (int pass = 0; pass < N - 1; pass++)
+   10268:	fe842783          	lw	a5,-24(s0)
+   1026c:	00178793          	addi	a5,a5,1
+   10270:	fef42423          	sw	a5,-24(s0)
+   10274:	fe842703          	lw	a4,-24(s0)
+   10278:	02b00793          	li	a5,43
+   1027c:	eee7dee3          	bge	a5,a4,10178 <sort+0x20>
+            }
+    swaps = s;
+   10280:	000117b7          	lui	a5,0x11
+   10284:	fec42703          	lw	a4,-20(s0)
+   10288:	3ee7ae23          	sw	a4,1020(a5) # 113fc <swaps>
+}
+   1028c:	00000013          	nop
+   10290:	02c12083          	lw	ra,44(sp)
+   10294:	02812403          	lw	s0,40(sp)
+   10298:	03010113          	addi	sp,sp,48
+   1029c:	00008067          	ret
+
+000102a0 <stats>:
+
+void stats(void)
+{
+   102a0:	fe010113          	addi	sp,sp,-32
+   102a4:	00112e23          	sw	ra,28(sp)
+   102a8:	00812c23          	sw	s0,24(sp)
+   102ac:	02010413          	addi	s0,sp,32
+    min_v = max_v = data[0];
+   102b0:	000117b7          	lui	a5,0x11
+   102b4:	40078793          	addi	a5,a5,1024 # 11400 <data>
+   102b8:	0007a703          	lw	a4,0(a5)
+   102bc:	000117b7          	lui	a5,0x11
+   102c0:	3ee7ac23          	sw	a4,1016(a5) # 113f8 <max_v>
+   102c4:	000117b7          	lui	a5,0x11
+   102c8:	3f87a703          	lw	a4,1016(a5) # 113f8 <max_v>
+   102cc:	000117b7          	lui	a5,0x11
+   102d0:	3ee7aa23          	sw	a4,1012(a5) # 113f4 <min_v>
+    for (int i = 1; i < N; i++) {
+   102d4:	00100793          	li	a5,1
+   102d8:	fef42623          	sw	a5,-20(s0)
+   102dc:	0980006f          	j	10374 <stats+0xd4>
+        if (data[i] < min_v)
+   102e0:	000117b7          	lui	a5,0x11
+   102e4:	40078713          	addi	a4,a5,1024 # 11400 <data>
+   102e8:	fec42783          	lw	a5,-20(s0)
+   102ec:	00279793          	slli	a5,a5,0x2
+   102f0:	00f707b3          	add	a5,a4,a5
+   102f4:	0007a703          	lw	a4,0(a5)
+   102f8:	000117b7          	lui	a5,0x11
+   102fc:	3f47a783          	lw	a5,1012(a5) # 113f4 <min_v>
+   10300:	02f75263          	bge	a4,a5,10324 <stats+0x84>
+            min_v = data[i];
+   10304:	000117b7          	lui	a5,0x11
+   10308:	40078713          	addi	a4,a5,1024 # 11400 <data>
+   1030c:	fec42783          	lw	a5,-20(s0)
+   10310:	00279793          	slli	a5,a5,0x2
+   10314:	00f707b3          	add	a5,a4,a5
+   10318:	0007a703          	lw	a4,0(a5)
+   1031c:	000117b7          	lui	a5,0x11
+   10320:	3ee7aa23          	sw	a4,1012(a5) # 113f4 <min_v>
+        if (data[i] > max_v)
+   10324:	000117b7          	lui	a5,0x11
+   10328:	40078713          	addi	a4,a5,1024 # 11400 <data>
+   1032c:	fec42783          	lw	a5,-20(s0)
+   10330:	00279793          	slli	a5,a5,0x2
+   10334:	00f707b3          	add	a5,a4,a5
+   10338:	0007a703          	lw	a4,0(a5)
+   1033c:	000117b7          	lui	a5,0x11
+   10340:	3f87a783          	lw	a5,1016(a5) # 113f8 <max_v>
+   10344:	02e7d263          	bge	a5,a4,10368 <stats+0xc8>
+            max_v = data[i];
+   10348:	000117b7          	lui	a5,0x11
+   1034c:	40078713          	addi	a4,a5,1024 # 11400 <data>
+   10350:	fec42783          	lw	a5,-20(s0)
+   10354:	00279793          	slli	a5,a5,0x2
+   10358:	00f707b3          	add	a5,a4,a5
+   1035c:	0007a703          	lw	a4,0(a5)
+   10360:	000117b7          	lui	a5,0x11
+   10364:	3ee7ac23          	sw	a4,1016(a5) # 113f8 <max_v>
+    for (int i = 1; i < N; i++) {
+   10368:	fec42783          	lw	a5,-20(s0)
+   1036c:	00178793          	addi	a5,a5,1
+   10370:	fef42623          	sw	a5,-20(s0)
+   10374:	fec42703          	lw	a4,-20(s0)
+   10378:	02c00793          	li	a5,44
+   1037c:	f6e7d2e3          	bge	a5,a4,102e0 <stats+0x40>
+    }
+    median = data[(N - 1) / 2];
+   10380:	000117b7          	lui	a5,0x11
+   10384:	40078793          	addi	a5,a5,1024 # 11400 <data>
+   10388:	0587a703          	lw	a4,88(a5)
+   1038c:	000117b7          	lui	a5,0x11
+   10390:	3ee7a823          	sw	a4,1008(a5) # 113f0 <median>
+}
+   10394:	00000013          	nop
+   10398:	01c12083          	lw	ra,28(sp)
+   1039c:	01812403          	lw	s0,24(sp)
+   103a0:	02010113          	addi	sp,sp,32
+   103a4:	00008067          	ret
+
+000103a8 <main>:
+
+int main(void)
+{
+   103a8:	ff010113          	addi	sp,sp,-16
+   103ac:	00112623          	sw	ra,12(sp)
+   103b0:	00812423          	sw	s0,8(sp)
+   103b4:	01010413          	addi	s0,sp,16
+    generate();
+   103b8:	d01ff0ef          	jal	100b8 <generate>
+    sort(SID & 1);
+   103bc:	0012c7b7          	lui	a5,0x12c
+   103c0:	4c578793          	addi	a5,a5,1221 # 12c4c5 <__global_pointer$+0x11a8d9>
+   103c4:	0017f793          	andi	a5,a5,1
+   103c8:	00078513          	mv	a0,a5
+   103cc:	d8dff0ef          	jal	10158 <sort>
+    stats();
+   103d0:	ed1ff0ef          	jal	102a0 <stats>
+    return 0;
+   103d4:	00000793          	li	a5,0
+}
+   103d8:	00078513          	mv	a0,a5
+   103dc:	00c12083          	lw	ra,12(sp)
+   103e0:	00812403          	lw	s0,8(sp)
+   103e4:	01010113          	addi	sp,sp,16
+   103e8:	00008067          	ret

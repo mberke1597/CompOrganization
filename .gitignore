@@ -1,9 +1,7 @@
 toolchain/
-docs/STUDY_GUIDE.md
 __pycache__/
 *.pyc
 ~$*.docx
 ~WRL*.tmp
-tools/fill_form.py
 CMPE3209_Proje_Odevi.docx
 CMPE3209_Proje_Teslim_Tutanagi.docx
